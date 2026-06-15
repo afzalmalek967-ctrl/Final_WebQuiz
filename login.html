@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Page</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+}
+
+.login-box{
+    width:400px;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+.login-box h1{
+    text-align:center;
+    margin-bottom:30px;
+    color:#111827;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    margin-bottom:20px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:16px;
+}
+
+.login-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:red;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+select{
+    width:100%;
+    padding:14px;
+    margin-bottom:20px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:16px;
+}
+
+.login-btn:hover{
+    background:darkred;
+}
+
+.register-link{
+    margin-top:20px;
+    text-align:center;
+}
+
+.register-link a{
+    text-decoration:none;
+    color:#2563eb;
+    font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <h1>Student Login</h1>
+
+    <!-- ONLY NUMBER INPUT -->
+    <input type="text" 
+           id="enroll"
+           placeholder="Enrollment Number"
+           maxlength="12"
+           oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+
+    <input type="password" placeholder="Password">
+
+    <select id="role">
+
+    <option value="student">
+        Student
+    </option>
+
+    <option value="admin">
+        Admin
+    </option>
+
+</select>
+
+    <button class="login-btn">
+        
+        LOGIN
+    </button>
+
+    <div class="register-link">
+        New Student?
+        <a href="register.html">
+            Register Here
+        </a>
+    </div>
+
+<script>
+
+document.querySelector(".login-btn").addEventListener("click", function(){
+
+    let enroll =
+    document.querySelectorAll("input")[0].value;
+
+    let password =
+    document.querySelectorAll("input")[1].value;
+
+    let role =
+    document.getElementById("role").value;
+
+    // CHECK EMPTY
+    if(enroll=="")
+    {
+        alert("Please Enter Enrollment Number");
+        return;
+    }
+
+    // ADMIN LOGIN
+
+    if(role=="admin")
+    {
+        if(enroll=="08112001" && password=="malek123")
+        {
+            alert("Admin Login Successful");
+
+            window.location.href="admin.html";
+        }
+
+        else{
+            alert("Invalid Admin Details");
+        }
+    }
+
+    // STUDENT LOGIN
+
+    else{
+
+        let savedEnroll =
+        localStorage.getItem("studentEnroll");
+
+        let savedPassword =
+        localStorage.getItem("studentPassword");
+
+        if(enroll==savedEnroll &&
+           password==savedPassword)
+        {
+            alert("Student Login Successful");
+
+            window.location.href="quiz.html";
+        }
+
+        else{
+            alert("Invalid Student Details");
+        }
+    }
+
+});
+
+</script>
+
+</div>
+
+</body>
+</html>

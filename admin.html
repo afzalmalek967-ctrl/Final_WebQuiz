@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px;
+}
+
+.admin-box{
+    width:950px;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* TOP */
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+    gap:20px;
+}
+
+.logo-box{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    overflow:hidden;
+    border:3px solid #2563eb;
+}
+
+.logo-box img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.center-text{
+    text-align:center;
+    flex:1;
+}
+
+.center-text h1{
+    font-size:32px;
+    color:#111827;
+}
+
+.center-text h2{
+    color:#475569;
+    margin-top:8px;
+}
+
+/* BUTTONS */
+
+.logout-btn,
+.add-btn,
+.delete-btn{
+    background:red;
+    color:white;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.logout-btn{
+    padding:12px 20px;
+}
+
+.add-btn{
+    width:100%;
+    padding:15px;
+    font-size:20px;
+    margin-bottom:30px;
+}
+
+.delete-btn{
+    padding:10px 20px;
+    margin-top:15px;
+}
+
+.logout-btn:hover,
+.add-btn:hover,
+.delete-btn:hover{
+    background:darkred;
+}
+
+/* INPUT */
+
+input{
+    width:100%;
+    padding:15px;
+    margin-bottom:18px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:16px;
+}
+
+/* TITLES */
+
+.section-title{
+    font-size:25px;
+    margin-bottom:20px;
+    color:#111827;
+}
+
+/* BOXES */
+
+.question-item,
+.user-item{
+    background:#f1f5f9;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:18px;
+    font-size:17px;
+    line-height:28px;
+}
+
+hr{
+    margin:40px 0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="admin-box">
+
+    <!-- TOP -->
+
+    <div class="top">
+
+        <!-- LEFT LOGO -->
+
+        <div class="logo-box">
+            <img src="c_logo.png">
+        </div>
+
+        <!-- CENTER TEXT -->
+
+        <div class="center-text">
+            <h1>Admin Panel</h1>
+            <h2>Manage Quiz & Users</h2>
+        </div>
+
+        <!-- LOGOUT -->
+
+        <button class="logout-btn"
+        onclick="logout()">
+            LOGOUT
+        </button>
+
+        <!-- RIGHT LOGO -->
+
+        <div class="logo-box">
+            <img src="g_logo.png">
+        </div>
+
+    </div>
+
+    <!-- ADD QUESTION -->
+
+    <h2 class="section-title">
+        Add Quiz Question
+    </h2>
+
+    <input type="text" id="question"
+    placeholder="Enter Question">
+
+    <input type="text" id="opt1"
+    placeholder="Option 1">
+
+    <input type="text" id="opt2"
+    placeholder="Option 2">
+
+    <input type="text" id="opt3"
+    placeholder="Option 3">
+
+    <input type="text" id="opt4"
+    placeholder="Option 4">
+
+    <input type="number" id="answer"
+    placeholder="Correct Answer Index (0-3)">
+
+    <button class="add-btn"
+    onclick="addQuestion()">
+        ADD QUESTION
+    </button>
+
+    <!-- QUESTION LIST -->
+
+    <h2 class="section-title">
+        Added Questions
+    </h2>
+
+    <div id="questionContainer"></div>
+
+    <hr>
+
+    <!-- USER LIST -->
+
+    <h2 class="section-title">
+        Registered Users
+    </h2>
+
+    <div id="userContainer"></div>
+
+</div>
+
+<script>
+
+/* QUESTIONS */
+
+let quizQuestions = [];
+
+/* USERS */
+
+let users = [];
+
+/* LOAD DATA */
+
+window.onload = function(){
+
+    // LOAD QUESTIONS
+
+    let savedQuestions =
+    localStorage.getItem("quizQuestions");
+
+    if(savedQuestions){
+
+        quizQuestions =
+        JSON.parse(savedQuestions);
+    }
+
+    // LOAD USERS
+
+    let savedUsers =
+    localStorage.getItem("users");
+
+    if(savedUsers){
+
+        users =
+        JSON.parse(savedUsers);
+    }
+
+    displayQuestions();
+
+    displayUsers();
+}
+
+/* ADD QUESTION */
+
+function addQuestion(){
+
+    let question =
+    document.getElementById("question").value;
+
+    let opt1 =
+    document.getElementById("opt1").value;
+
+    let opt2 =
+    document.getElementById("opt2").value;
+
+    let opt3 =
+    document.getElementById("opt3").value;
+
+    let opt4 =
+    document.getElementById("opt4").value;
+
+    let answer =
+    document.getElementById("answer").value;
+
+    if(question=="" || opt1=="" ||
+       opt2=="" || opt3=="" ||
+       opt4=="" || answer=="")
+    {
+        alert("Please Fill All Fields");
+    }
+
+    else{
+
+        let newQuestion = {
+
+            question:question,
+
+            options:[
+                opt1,
+                opt2,
+                opt3,
+                opt4
+            ],
+
+            answer:Number(answer)
+        };
+
+        quizQuestions.push(newQuestion);
+
+        localStorage.setItem(
+            "quizQuestions",
+            JSON.stringify(quizQuestions)
+        );
+
+        alert("Question Added Successfully ✅");
+
+        displayQuestions();
+
+        clearFields();
+    }
+}
+
+/* DISPLAY QUESTIONS */
+
+function displayQuestions(){
+
+    let container =
+    document.getElementById("questionContainer");
+
+    container.innerHTML = "";
+
+    if(quizQuestions.length == 0){
+
+        container.innerHTML =
+        "<p>No Questions Added</p>";
+
+        return;
+    }
+
+    quizQuestions.forEach(function(q,index){
+
+        container.innerHTML +=
+
+        "<div class='question-item'>" +
+
+        "<b>Question :</b> "
+        + q.question +
+
+        "<br><br>" +
+
+        "<b>Options :</b><br>" +
+
+        "1. "+q.options[0]+"<br>" +
+        "2. "+q.options[1]+"<br>" +
+        "3. "+q.options[2]+"<br>" +
+        "4. "+q.options[3]+"<br><br>" +
+
+        "<b>Correct Answer :</b> "
+        + (q.answer + 1) +
+
+        "<br>" +
+
+        "<button class='delete-btn' onclick='deleteQuestion("+index+")'>" +
+
+        "DELETE QUESTION</button>" +
+
+        "</div>";
+    });
+}
+
+/* DELETE QUESTION */
+
+function deleteQuestion(index){
+
+    quizQuestions.splice(index,1);
+
+    localStorage.setItem(
+        "quizQuestions",
+        JSON.stringify(quizQuestions)
+    );
+
+    displayQuestions();
+
+    alert("Question Deleted ❌");
+}
+
+/* DISPLAY USERS */
+
+function displayUsers(){
+
+    let container =
+    document.getElementById("userContainer");
+
+    container.innerHTML = "";
+
+    if(users.length == 0){
+
+        container.innerHTML =
+        "<p>No Registered Users</p>";
+
+        return;
+    }
+
+    users.forEach(function(user,index){
+
+        container.innerHTML +=
+
+        "<div class='user-item'>" +
+
+        "<b>Full Name :</b> "
+        + user.name + "<br><br>" +
+
+        "<b>Enrollment No :</b> "
+        + user.enroll + "<br><br>" +
+
+        "<b>Email :</b> "
+        + user.email + "<br><br>" +
+
+        "<b>Department :</b> "
+        + user.dept + "<br><br>" +
+
+        "<b>Semester :</b> "
+        + user.sem + "<br><br>" +
+
+        "<b>Password :</b> "
+        + user.password + "<br><br>" +
+
+        "<button class='delete-btn' onclick='deleteUser("+index+")'>" +
+
+        "DELETE USER</button>" +
+
+        "</div>";
+    });
+}
+
+/* DELETE USER */
+
+function deleteUser(index){
+
+    users.splice(index,1);
+
+    localStorage.setItem(
+        "users",
+        JSON.stringify(users)
+    );
+
+    displayUsers();
+
+    alert("User Deleted ❌");
+}
+
+/* CLEAR FIELDS */
+
+function clearFields(){
+
+    document.getElementById("question").value = "";
+
+    document.getElementById("opt1").value = "";
+
+    document.getElementById("opt2").value = "";
+
+    document.getElementById("opt3").value = "";
+
+    document.getElementById("opt4").value = "";
+
+    document.getElementById("answer").value = "";
+}
+
+/* LOGOUT */
+
+function logout(){
+
+    alert("Logout Successful ✅");
+
+    window.location.href = "login.html";
+}
+
+</script>
+
+</body>
+</html>

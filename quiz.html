@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Quiz Page</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,darkblue,darkslategray);
+    padding:20px;
+}
+
+.quiz-box{
+    width:750px;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+.card{
+    margin-bottom:25px;
+}
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo-box{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    overflow:hidden;
+    border:3px solid blue;
+}
+
+.logo-box img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.center-text{
+    text-align:center;
+    flex:1;
+}
+
+.center-text h1{
+    font-size:32px;
+}
+
+.center-text h2{
+    color:gray;
+}
+
+.timer{
+    text-align:right;
+    color:red;
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.question{
+    font-size:28px;
+    font-weight:bold;
+    margin-bottom:25px;
+}
+
+.option{
+    background:lightgray;
+    padding:16px;
+    margin-bottom:15px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:18px;
+    transition:0.3s;
+}
+
+.option:hover{
+    background:lightblue;
+}
+
+.selected{
+    background:darkgreen;
+    color:white;
+    border:2px solid red;
+}
+
+.next-btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:red;
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="quiz-box">
+
+    <div class="card">
+
+        <div class="top">
+
+            <div class="logo-box">
+                <img src="c_logo.png">
+            </div>
+
+            <div class="center-text">
+                <h1>Web Quiz Project</h1>
+                <h2>Student Quiz Panel</h2>
+            </div>
+
+            <div class="logo-box">
+                <img src="g_logo.png">
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="timer">
+        Time Left :
+        <span id="time">30</span>s
+    </div>
+
+    <div class="question"
+    id="question">
+        Question Here
+    </div>
+
+    <div class="option"
+    onclick="checkAnswer(0)"
+    id="opt0"></div>
+
+    <div class="option"
+    onclick="checkAnswer(1)"
+    id="opt1"></div>
+
+    <div class="option"
+    onclick="checkAnswer(2)"
+    id="opt2"></div>
+
+    <div class="option"
+    onclick="checkAnswer(3)"
+    id="opt3"></div>
+
+    <button class="next-btn"
+    onclick="nextQuestion()">
+        NEXT
+    </button>
+
+</div>
+
+<!-- CONNECT JAVASCRIPT FILE -->
+
+<script src="quiz.js"></script>
+
+</body>
+</html>

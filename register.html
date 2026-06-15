@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register Page</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+}
+
+.register-box{
+    width:450px;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+.register-box h1{
+    text-align:center;
+    margin-bottom:30px;
+    color:#111827;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    margin-bottom:18px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    outline:none;
+    font-size:16px;
+}
+
+.register-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.register-btn:hover{
+    background:#1d4ed8;
+}
+
+.login-link{
+    margin-top:20px;
+    text-align:center;
+}
+
+.login-link a{
+    text-decoration:none;
+    color:red;
+    font-weight:bold;
+}
+
+.error{
+    color:red;
+    font-size:14px;
+    margin-top:-12px;
+    margin-bottom:12px;
+    display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="register-box">
+
+    <h1>Student Register</h1>
+
+    <!-- NAME -->
+    <input type="text" 
+    id="name"
+    placeholder="Full Name"
+    oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')">
+
+    <!-- ENROLLMENT -->
+    <input type="text" 
+    id="enroll"
+    placeholder="Enrollment Number"
+    maxlength="12"
+    oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+
+    <!-- EMAIL -->
+    <input type="text" 
+    id="email"
+    placeholder="Email Address">
+
+    <!-- EMAIL ERROR -->
+    <p id="emailError" class="error">
+        Invalid Email Format
+    </p>
+
+    <!-- DEPARTMENT -->
+    <input type="text" 
+    id="dept"
+    placeholder="Department"
+    oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')">
+
+    <!-- SEMESTER -->
+    <input type="text" 
+    id="sem"
+    placeholder="Semester"
+    maxlength="2"
+    oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+
+    <!-- PASSWORD -->
+    <input type="password" 
+    id="password"
+    placeholder="Create Password">
+
+    <button class="register-btn"
+    onclick="registerStudent()">
+        REGISTER
+    </button>
+
+    <div class="login-link">
+
+        Already have account?
+
+        <a href="login.html">
+            Login Here
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+
+function registerStudent(){
+
+    // GET VALUES
+
+    let name =
+    document.getElementById("name").value;
+
+    let enroll =
+    document.getElementById("enroll").value;
+
+    let email =
+    document.getElementById("email").value;
+
+    let dept =
+    document.getElementById("dept").value;
+
+    let sem =
+    document.getElementById("sem").value;
+
+    let password =
+    document.getElementById("password").value;
+
+    let emailError =
+    document.getElementById("emailError");
+
+    // EMPTY CHECK
+
+    if(name=="" || enroll=="" ||
+       email=="" || dept=="" ||
+       sem=="" || password=="")
+    {
+        alert("Please Fill All Fields");
+        return;
+    }
+
+    // EMAIL VALIDATION
+
+    let emailPattern =
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if(!emailPattern.test(email))
+    {
+        emailError.style.display = "block";
+        return;
+    }
+
+    else{
+        emailError.style.display = "none";
+    }
+
+    // LOAD OLD USERS
+
+    let users =
+    JSON.parse(localStorage.getItem("users")) || [];
+
+    // CHECK DUPLICATE ENROLLMENT
+
+    let userExists = users.find(function(user){
+
+        return user.enroll == enroll;
+    });
+
+    if(userExists){
+
+        alert("Enrollment Already Registered ❌");
+
+        return;
+    }
+
+    // NEW USER
+
+    let newUser = {
+
+        name:name,
+        enroll:enroll,
+        email:email,
+        dept:dept,
+        sem:sem,
+        password:password
+    };
+
+    users.push(newUser);
+
+    // SAVE USERS
+
+    localStorage.setItem(
+        "users",
+        JSON.stringify(users)
+    );
+
+    // SAVE LOGIN DETAILS
+
+    localStorage.setItem(
+        "studentEnroll",
+        enroll
+    );
+
+    localStorage.setItem(
+        "studentPassword",
+        password
+    );
+
+    // SUCCESS
+
+    alert("Registration Complete Successfully ✅");
+
+    // REDIRECT
+
+    window.location.href = "login.html";
+}
+
+</script>
+
+</body>
+</html>
